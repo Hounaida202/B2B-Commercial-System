@@ -5,8 +5,8 @@ import lombok.Data;
 
 
 @Data
-public class ClientUpdateDTO {
+public class ClientDTO {
     private String nom;
     private CustomerTier customerTier;
-    private UserUpdateDTO user;
+    private UserDTO user;
 }
