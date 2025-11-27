@@ -6,9 +6,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserUpdateDTO {
+public class UserDTO {
 
     private String username;
     private UserRole userRole;
+    private String password;
 
 }
