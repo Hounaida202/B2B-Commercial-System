@@ -13,6 +13,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class AuthController {
 
+      @Autowired
+      private AuthService authService;
 
+
+      @PostMapping("login")
+      public ResponseEntity<?> login( @RequestBody AuthRequestDTO userDTO,
+                                                   HttpSession session){
+          AuthResponseDTO logged = authService.login(userDTO,session);
+          if(logged==null){
+              return ResponseEntity
+                      .status(400)
+                      .body("infos incorrectes");
+          }
+          return ResponseEntity.ok(logged);
+
+      }
 
 }
