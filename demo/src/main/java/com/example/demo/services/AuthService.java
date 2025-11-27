@@ -18,7 +18,27 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
+    public AuthResponseDTO login(AuthRequestDTO userDTO, HttpSession session){
 
+              User z = userRepository.findByUsername(userDTO.getUsername());
+              if(z==null){
+                  return null;
+              }
+              else{
+                  if(z.getPassword().equals(userDTO.getPassword())){
+                      session.setAttribute("userID",z.getId());
+                      session.setAttribute("username",z.getUsername());
+                      session.setAttribute("role",z.getRole());
+
+                      AuthResponseDTO logged = new AuthResponseDTO();
+                      logged.setUsername(z.getUsername());
+                      logged.setRole(z.getRole());
+                      logged.setMsg("connexion reussite et nouvelle session crée");
+                      return logged;
+                  }
+                  return null;
+              }
+          }
 
 
 
