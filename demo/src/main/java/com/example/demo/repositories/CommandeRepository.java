@@ -1,4 +1,7 @@
 package com.example.demo.repositories;
 
-public interface CommandeRepository {
+import com.example.demo.entities.Commande;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CommandeRepository extends JpaRepository<Commande,Long> {
 }
