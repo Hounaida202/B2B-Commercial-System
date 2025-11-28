@@ -4,6 +4,7 @@ import com.example.demo.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,8 +16,8 @@ public class Commande {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "commande")
-    private List<CommandeProduit> commande_produit;
+    @OneToMany(mappedBy = "commande" , cascade=CascadeType.ALL)
+    private List<CommandeProduit> commande_produit = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name="client_id")
