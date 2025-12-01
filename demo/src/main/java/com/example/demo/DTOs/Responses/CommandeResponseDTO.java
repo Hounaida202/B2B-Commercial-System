@@ -1,16 +1,15 @@
-package com.example.demo.DTOs.Requests;
+package com.example.demo.DTOs.Responses;
 
+import com.example.demo.DTOs.Requests.ProduitDTO;
 import com.example.demo.enums.OrderStatus;
-
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
-
 @Data
-public class CommandeRequestDTO {
+public class CommandeResponseDTO {
 
-    private List<Long> produitids;
+    private List<ProduitDTO> produits;
 
     private Long clientId;
 
