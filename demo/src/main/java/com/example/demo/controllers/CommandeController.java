@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 
 import com.example.demo.DTOs.Requests.CommandeRequestDTO;
+import com.example.demo.DTOs.Responses.CommandeResponseDTO;
 import com.example.demo.services.CommandeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,11 @@ public class CommandeController {
     private CommandeService commandeService;
 
     @PostMapping("creerCommande")
-    public ResponseEntity<?> creerCommande(@RequestBody CommandeRequestDTO dto){
-        commandeService.creerCommande(dto);
+    public ResponseEntity<CommandeResponseDTO> creerCommande(@RequestBody CommandeRequestDTO dto){
+        CommandeResponseDTO commandeResponseDTO =commandeService.creerCommande(dto);
 
-        return ResponseEntity.status(201).body("bien");
+        return ResponseEntity.ok(commandeResponseDTO);
     }
+
 
 }
