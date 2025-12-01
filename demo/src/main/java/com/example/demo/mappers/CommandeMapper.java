@@ -1,6 +1,7 @@
 package com.example.demo.mappers;
 
 import com.example.demo.DTOs.Requests.CommandeRequestDTO;
+import com.example.demo.DTOs.Responses.CommandeResponseDTO;
 import com.example.demo.entities.Commande;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,6 +15,6 @@ public interface CommandeMapper {
 
     Commande toEntity(CommandeRequestDTO commandeRequestDto);
 
-
-    CommandeRequestDTO toDTO(Commande commande);
+    @Mapping(target="clientId" ,ignore=true)
+    CommandeResponseDTO toDTO(Commande commande);
 }
