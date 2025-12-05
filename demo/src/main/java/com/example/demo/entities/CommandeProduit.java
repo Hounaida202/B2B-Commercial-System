@@ -3,7 +3,6 @@ package com.example.demo.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 @Entity
 @Table(name="commande_produit")
 @Data
@@ -20,5 +19,13 @@ public class CommandeProduit {
     @ManyToOne
     @JoinColumn(name="produit_id")
     private Produit produit;
+
+    private Double prixUnitaire;
+
+    private Double totalLigne;
+
+    private int quantite;
+
+
 
 }
