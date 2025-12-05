@@ -4,8 +4,11 @@ import com.example.demo.DTOs.Requests.AuthRequestDTO;
 
 import com.example.demo.DTOs.Responses.AuthResponseDTO;
 
+import com.example.demo.entities.Client;
 import com.example.demo.entities.User;
 
+import com.example.demo.exceptions.NotFoundException;
+import com.example.demo.repositories.ClientRepository;
 import com.example.demo.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,28 +20,38 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ClientRepository clientRepository;
 
-    public AuthResponseDTO login(AuthRequestDTO userDTO, HttpSession session){
 
-              User z = userRepository.findByUsername(userDTO.getUsername());
-              if(z==null){
-                  return null;
-              }
-              else{
-                  if(z.getPassword().equals(userDTO.getPassword())){
-                      session.setAttribute("userID",z.getId());
-                      session.setAttribute("username",z.getUsername());
-                      session.setAttribute("role",z.getRole());
+    public AuthResponseDTO login(AuthRequestDTO userDTO, HttpSession session) {
 
-                      AuthResponseDTO logged = new AuthResponseDTO();
-                      logged.setUsername(z.getUsername());
-                      logged.setRole(z.getRole());
-                      logged.setMsg("connexion reussite et nouvelle session crée");
-                      return logged;
-                  }
-                  return null;
-              }
-          }
+        User z = userRepository.findByUsername(userDTO.getUsername());
+        if (z == null) {
+            throw new NotFoundException("User non trouvé");
+        }
+
+        if (!z.getPassword().equals(userDTO.getPassword())) {
+            throw new NotFoundException("mot de passe incorrecte");
+        }
+
+        session.setAttribute("userID", z.getId());
+        session.setAttribute("username", z.getUsername());
+        session.setAttribute("role", z.getRole());
+
+        Client client = clientRepository.findByUserId(z.getId());
+
+        if (client != null) {
+            session.setAttribute("clientID", client.getId());
+        }
+
+        AuthResponseDTO logged = new AuthResponseDTO();
+        logged.setUsername(z.getUsername());
+        logged.setRole(z.getRole());
+        logged.setMsg("connexion reussite");
+
+        return logged;
+    }
 
 
 
