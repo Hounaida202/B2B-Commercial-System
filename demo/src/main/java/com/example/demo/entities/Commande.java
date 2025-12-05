@@ -33,10 +33,14 @@ public class Commande {
 
     private Double total;
 
+    @Column(nullable = true)
     private String codePromo;
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     private Double montantRestant;
+
+
 }
 
