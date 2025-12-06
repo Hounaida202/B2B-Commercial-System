@@ -1,13 +1,12 @@
 package com.example.demo.services;
 
 import com.example.demo.DTOs.Requests.ClientDTO;
-import com.example.demo.DTOs.Requests.ClientDTO;
 import com.example.demo.DTOs.Responses.ClientResponseDTO;
 import com.example.demo.DTOs.Responses.UserResponseDTO;
 import com.example.demo.entities.Client;
 import com.example.demo.entities.User;
+import com.example.demo.enums.CustomerTier;
 import com.example.demo.exceptions.NotFoundException;
-import com.example.demo.mappers.AuthMapper;
 import com.example.demo.mappers.ClientMapper;
 import com.example.demo.repositories.ClientRepository;
 import com.example.demo.repositories.UserRepository;
@@ -86,6 +85,7 @@ public class ClientService {
         clientdto.getUser().setPassword(UUID.randomUUID().toString().replace("-", "").substring(0, 10));
 
         Client client = clientMapper.toEntity(clientdto);
+        client.setCustomerTier(CustomerTier.BASIC);
 
         Client saved=clientRepository.save(client);
 
