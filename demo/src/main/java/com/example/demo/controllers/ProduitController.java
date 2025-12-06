@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.DTOs.Requests.ProduitDTO;
+import com.example.demo.DTOs.Responses.ProduitResponseDTO;
 import com.example.demo.entities.Produit;
 import com.example.demo.services.ProduitService;
 import jakarta.validation.Valid;
@@ -31,14 +32,14 @@ public class ProduitController {
     public ResponseEntity<?> modifierProduit(@Valid @RequestBody ProduitDTO produitdto,
                                              @PathVariable Long id) {
 
-        ProduitDTO updated = produitService.modifierProduit(id, produitdto);
+        ProduitResponseDTO updated = produitService.modifierProduit(id, produitdto);
 
         return ResponseEntity.ok(updated);
     }
 
 
     @GetMapping("/produits")
-    public ResponseEntity<List<ProduitDTO>> getProduits(
+    public ResponseEntity<List<ProduitResponseDTO>> getProduits(
             @RequestParam(required = false) String nom,
             @RequestParam(required = false) Integer stock,
             @RequestParam(defaultValue = "0") int page,
@@ -46,7 +47,7 @@ public class ProduitController {
     ) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProduitDTO> pageResult = produitService.recuperProduitsAvecPaginationEtFilter(
+        Page<ProduitResponseDTO> pageResult = produitService.recuperProduitsAvecPaginationEtFilter(
                 nom,
                 stock,
                 pageable
