@@ -9,9 +9,8 @@ import java.util.List;
 @Data
 public class CommandeResponseDTO {
 
-    private List<ProduitDTO> produits;
 
-    private Long clientId;
+    private List<CommandeProduitResponseDTO> produits;
 
     private LocalDate date;
 
@@ -23,7 +22,6 @@ public class CommandeResponseDTO {
 
     private Double total;
 
-    private String codePromo;
 
     private OrderStatus orderStatus;
 
