@@ -9,5 +9,6 @@ import java.util.List;
 public interface CommandeRepository extends JpaRepository<Commande,Long> {
     int countByClientIdAndOrderStatus(Long clientId, OrderStatus status);
     List<Commande> findByClientIdAndOrderStatus(Long id , OrderStatus orderStatus);
+    List<Commande> findByClientId(Long clientId);
 
 }
