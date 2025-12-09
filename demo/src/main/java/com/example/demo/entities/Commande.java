@@ -19,6 +19,9 @@ public class Commande {
     @OneToMany(mappedBy = "commande" , cascade=CascadeType.ALL)
     private List<CommandeProduit> commande_produit = new ArrayList<>();
 
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
+    private List<Paiement> paiements = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name="client_id")
     private Client client;
