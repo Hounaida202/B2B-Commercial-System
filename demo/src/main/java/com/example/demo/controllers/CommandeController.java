@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/commande")
 public class CommandeController {
@@ -42,4 +44,24 @@ public class CommandeController {
         CommandeResponseDTO commande = commandeService.confirmerCommande(id);
         return ResponseEntity.ok(commande);
     }
+
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<CommandeResponseDTO>> getCommandesClient(@PathVariable Long clientId , HttpSession session) {
+
+        roleChecker.verifierAdmin(session);
+
+        List<CommandeResponseDTO> commandes = commandeService.recupererCommandes(clientId);
+        return ResponseEntity.ok(commandes);
+    }
+
+    @GetMapping("/mes-commandes")
+    public ResponseEntity<List<CommandeResponseDTO>> getCommandesConnecte(HttpSession session) {
+
+        roleChecker.verifierClient(session);
+
+        List<CommandeResponseDTO> commandes = commandeService.recupererMesCommande(session);
+        return ResponseEntity.ok(commandes);
+    }
+
+
 }
