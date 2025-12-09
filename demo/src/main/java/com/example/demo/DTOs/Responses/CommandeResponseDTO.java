@@ -22,7 +22,6 @@ public class CommandeResponseDTO {
 
     private Double total;
 
-
     private OrderStatus orderStatus;
 
     private Double montantRestant;
