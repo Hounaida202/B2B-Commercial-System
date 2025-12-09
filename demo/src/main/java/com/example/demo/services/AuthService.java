@@ -12,6 +12,7 @@ import com.example.demo.repositories.ClientRepository;
 import com.example.demo.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -22,6 +23,7 @@ public class AuthService {
     private UserRepository userRepository;
     @Autowired
     private ClientRepository clientRepository;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     public AuthResponseDTO login(AuthRequestDTO userDTO, HttpSession session) {
@@ -31,7 +33,11 @@ public class AuthService {
             throw new NotFoundException("User non trouvé");
         }
 
-        if (!z.getPassword().equals(userDTO.getPassword())) {
+//        if (!z.getPassword().equals(userDTO.getPassword())) {
+//            throw new NotFoundException("mot de passe incorrecte");
+//        }
+        // Changer cette ligne
+        if (!passwordEncoder.matches(userDTO.getPassword(), z.getPassword())) {
             throw new NotFoundException("mot de passe incorrecte");
         }
 
