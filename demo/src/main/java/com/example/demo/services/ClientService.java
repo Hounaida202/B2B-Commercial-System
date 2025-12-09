@@ -6,11 +6,13 @@ import com.example.demo.DTOs.Responses.UserResponseDTO;
 import com.example.demo.entities.Client;
 import com.example.demo.entities.User;
 import com.example.demo.enums.CustomerTier;
+import com.example.demo.enums.UserRole;
 import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.mappers.ClientMapper;
 import com.example.demo.repositories.ClientRepository;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,6 +27,8 @@ public class ClientService {
     private ClientMapper clientMapper;
     @Autowired
     private ClientRepository clientRepository;
+
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     public ClientResponseDTO getOneClientInfos(Long id) {
@@ -80,16 +84,62 @@ public class ClientService {
         return false;
     }
 
-    public ClientDTO creerClient(ClientDTO clientdto){
+//    public ClientDTO creerClient(ClientDTO clientdto){
+//
+//        clientdto.getUser().setPassword(UUID.randomUUID().toString().replace("-", "").substring(0, 10));
+//
+//        Client client = clientMapper.toEntity(clientdto);
+//        client.setUser();
+//        client.setCustomerTier(CustomerTier.BASIC);
+//
+//        Client saved=clientRepository.save(client);
+//
+//        return clientMapper.toDTO(saved);
+//
+//    }
 
-        clientdto.getUser().setPassword(UUID.randomUUID().toString().replace("-", "").substring(0, 10));
 
-        Client client = clientMapper.toEntity(clientdto);
-        client.setCustomerTier(CustomerTier.BASIC);
+    public ClientResponseDTO creerrClient(ClientDTO dto){
 
-        Client saved=clientRepository.save(client);
 
-        return clientMapper.toDTO(saved);
+        User user = new User();
+        user.setRole(UserRole.CLIENT);
+
+        if(userRepository.countByUsername(dto.getUser().getUsername())>0){
+            throw new IllegalArgumentException("username existe deja");
+
+        }
+        else{
+            user.setUsername(dto.getUser().getUsername());
+
+
+            String password = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+
+
+            String crypted = passwordEncoder.encode(password);
+            user.setPassword(crypted);
+
+            Client client = clientMapper.toEntity(dto);
+
+            client.setUser(user);
+            client.setCustomerTier(CustomerTier.BASIC);
+
+
+            Client saved=clientRepository.save(client);
+            ClientResponseDTO reponse = clientMapper.toDTO(saved);
+
+            UserResponseDTO userresponse = reponse.getUser();
+            userresponse.setPassword(password);
+            reponse.setUser(userresponse);
+
+            return reponse;
+        }
+
 
     }
+
+
+
+
+
 }
