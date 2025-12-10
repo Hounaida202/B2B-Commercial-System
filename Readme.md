@@ -91,39 +91,6 @@ Moyens acceptés :
 
 ---
 
-# 🏗 Architecture du projet
-
-```
-SmartShop/
-├── src/
-│   ├── main/
-│   │   ├── java/com/microtech/SmartShop/
-│   │   │   ├── config/                 # Configuration de l'application
-│   │   │   │
-│   │   │   ├── controller/             # Contrôleurs REST
-│   │   │   │
-│   │   │   ├── dto/                    # Objets de Transfert de Données
-│   │   │   │
-│   │   │   ├── entity/                 # Entités JPA
-│   │   │   ├── entity/enums/           # Énumérations
-│   │   │   │
-│   │   │   ├── exception/              # Gestion des exceptions
-│   │   │   │
-│   │   │   ├── repository/             # Interfaces JPA
-│   │   │   │
-│   │   │   ├── security/               # Configuration de sécurité
-│   │   │   │
-│   │   │   ├── service/                # Couche service
-│   │   │   │   ├── impl/               # Implémentations
-│   │   │   │
-│   │   │   └── SmartShopApplication.java  # Classe principale
-│   │   │
-│   │   └── resources/                  # Fichiers de ressources
-│   │
-│   └── test/                           # Tests unitaires et d'intégration
-│
-└── pom.xml                             # Fichier de configuration Maven
-```
 
 ### Design Patterns utilisés
 
@@ -226,16 +193,6 @@ Créer → Calcul → Paiements → Validation.
 
 Ajouter différents paiements jusqu’à couvrir le total TTC.
 
----
-
-# 🏆 Gestion de la fidélité (algorithme simplifié)
-
-```java
-if (totalOrders >= 20 || totalSpent >= 15000) return PLATINUM;
-if (totalOrders >= 10 || totalSpent >= 5000) return GOLD;
-if (totalOrders >= 3  || totalSpent >= 1000) return SILVER;
-return BASIC;
-```
 
 ---
 
