@@ -5,6 +5,7 @@ import com.example.demo.DTOs.Responses.CommandeResponseDTO;
 import com.example.demo.services.CommandeService;
 import com.example.demo.utils.RoleChecker;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class CommandeController {
 
     @PostMapping("creerCommande")
     public ResponseEntity<CommandeResponseDTO> creerCommande(
-            @RequestBody CommandeRequestDTO dto,
+            @Valid @RequestBody CommandeRequestDTO dto,
             HttpSession session) {
 
         roleChecker.verifierClient(session);

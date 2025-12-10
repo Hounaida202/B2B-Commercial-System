@@ -25,7 +25,6 @@ public class AuthController {
                       .body("infos incorrectes");
           }
           return ResponseEntity.ok(logged);
-
       }
 
 }

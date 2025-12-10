@@ -19,9 +19,10 @@ public class DemoApplication {
         ClientSeeder client = context.getBean(ClientSeeder.class);
 
 
-        User adminUser = admin.loadAdmin();
-        Client clientUser = client.loadClient();
-        client.recupererclients();
+//        User adminUser = admin.loadAdmin();
+//        Client clientUser = client.loadClient();
+//
+//        client.recupererclients();
 
 
 

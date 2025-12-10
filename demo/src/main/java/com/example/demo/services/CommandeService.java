@@ -190,6 +190,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.demo.exceptions.UnprocessableEntityException;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -228,8 +230,7 @@ public class CommandeService {
             Produit produit = produitRepository.findById(item.getProduitId())
                     .orElseThrow(() -> new NotFoundException("Produit non trouvé : ID " + item.getProduitId()));
             if (produit.getStock() < item.getQuantite()) {
-                throw new IllegalArgumentException(
-                        "Stock insuffisant pour " + produit.getNom());
+                throw new UnprocessableEntityException("Stock insuffisant pour " + produit.getNom());
             }
         }
 
@@ -277,19 +278,18 @@ public class CommandeService {
                 .orElseThrow(() -> new NotFoundException("Commande introuvable"));
 
         if (commande.getOrderStatus() != OrderStatus.PENDING) {
-            throw new IllegalArgumentException("Seules les commandes PENDING peuvent être confirmées");
+            throw new UnprocessableEntityException("Seules les commandes PENDING peuvent être confirmées");
         }
 
         if (commande.getMontantRestant() == null || commande.getMontantRestant() > 0) {
-            throw new BadRequestException("La commande doit être totalement payée avant d'être confirmée (montant restant : "
-                    + commande.getMontantRestant() + " DH)");
+            throw new UnprocessableEntityException("La commande doit être totalement payée avant d'être confirmée");
         }
 
         for (CommandeProduit cp : commande.getCommande_produit()) {
             Produit produit = cp.getProduit();
 
             if (produit.getStock() < cp.getQuantite()) {
-                throw new IllegalArgumentException("Stock insuffisant pour " + produit.getNom());
+                throw new UnprocessableEntityException("Stock insuffisant pour " + produit.getNom());
             }
 
             produit.setStock(produit.getStock() - cp.getQuantite());
@@ -348,17 +348,15 @@ public class CommandeService {
     public List<CommandeResponseDTO> recupererMesCommande(HttpSession session) {
 
 
-        Long idClient = (Long) session.getAttribute("clientId");
+        Long idClient = (Long) session.getAttribute("clientID");
         if (idClient == null) {
          throw new BadRequestException("Client non connecté");
         }
         Client client = clientRepository.findById(idClient)
                 .orElseThrow(() -> new NotFoundException("Client non trouvé"));
 
-        // Récupérer les commandes pour ce client
         List<Commande> commandes = commandeRepository.findByClientId(idClient);
 
-        // Convertir en DTO
         return commandes.stream()
                 .map(commandeMapper::toDTO)
                 .collect(Collectors.toList());

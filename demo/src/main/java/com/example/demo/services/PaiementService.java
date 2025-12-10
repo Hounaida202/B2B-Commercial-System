@@ -8,6 +8,7 @@ import com.example.demo.enums.PaymentMethod;
 import com.example.demo.enums.PaymentStatus;
 import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.NotFoundException;
+import com.example.demo.exceptions.UnprocessableEntityException;
 import com.example.demo.mappers.PaiementMapper;
 import com.example.demo.repositories.CommandeRepository;
 import com.example.demo.repositories.PaiementRepository;
@@ -17,7 +18,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,18 +48,28 @@ public class PaiementService {
                 .orElseThrow(() -> new NotFoundException("Commande introuvable"));
 
         if (commande.getMontantRestant() == null || commande.getMontantRestant() == 0) {
-            throw new BadRequestException("Cette commande est déjà totalement payée");
+            throw new UnprocessableEntityException("Cette commande est déjà totalement payée");
         }
-
         if (dto.getMontant() > commande.getMontantRestant()) {
-            throw new BadRequestException("Le montant du paiement dépasse le montant restant dû");
+            throw new UnprocessableEntityException("Le montant du paiement dépasse le montant restant ");
         }
 
         if (dto.getMoyenPaiement() == PaymentMethod.ESPECES) {
             if (dto.getMontant() > 20000) {
-                throw new BadRequestException("Le paiement en espèces ne peut pas dépasser 20 000 DH");
+                throw new UnprocessableEntityException("Le paiement en espèces ne peut pas dépasser 20 000 DH");
             }
         }
+
+        if (dto.getMoyenPaiement() == PaymentMethod.ESPECES
+                || dto.getMoyenPaiement() == PaymentMethod.VIREMENT) {
+
+            if (!commande.getMontantRestant().equals(dto.getMontant())) {
+                throw new BadRequestException(
+                        "Le montant du paiement doit être exactement égal au montant restant de la commande"
+                );
+            }
+        }
+
 
         if (dto.getMoyenPaiement() == PaymentMethod.CHEQUE) {
             if (dto.getBanque() == null || dto.getBanque().trim().isEmpty()) {
@@ -138,6 +151,21 @@ public class PaiementService {
                 .collect(Collectors.toList());
     }
 
+
+
+
+//    public List<Paiement> getPaiementTest(Long commandeId) {
+//        Commande commande = commandeRepository.findById(commandeId)
+//                .orElseThrow(() -> new NotFoundException("Commande introuvable"));
+//
+//        List<Paiement> paiements = paiementRepository.findByCommandeId(commandeId);
+//
+//        Optional<Paiement> ps = paiements.stream().
+//                            filter(p->p.getStatut().equals("ENCAISSE"))
+//                .collect(Collectors.minBy(Comparator.comparing(Paiement::getMontant)));
+//
+//        return ps;
+//    }
 
 
 
