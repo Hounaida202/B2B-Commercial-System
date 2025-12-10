@@ -221,4 +221,4 @@ Gérée via `@ControllerAdvice`.
 ---
 
 ## la diagramme des classes
-![SmartShopDiagramme.jpg](demo/src/main/java/com/example/demo/SmartShopDiagramme.jpg)
+![Le2EmeDiagramme.jpg](demo/src/main/java/com/example/demo/Le2EmeDiagramme.jpg)

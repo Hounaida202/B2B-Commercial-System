@@ -162,7 +162,7 @@ public class PaiementService {
 //
 //        Optional<Paiement> ps = paiements.stream().
 //                            filter(p->p.getStatut().equals("ENCAISSE"))
-//                .collect(Collectors.minBy(Comparator.comparing(Paiement::getMontant)));
+//
 //
 //        return ps;
 //    }
